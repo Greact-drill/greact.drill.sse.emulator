@@ -1,0 +1,19 @@
+services:
+  greact-drill-sse-emulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NOTION_API_KEY=${NOTION_API_KEY}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+      - SSE_INTERVAL=${SSE_INTERVAL}
+      - PORT=${PORT}
+    expose:
+      - ${PORT}
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
