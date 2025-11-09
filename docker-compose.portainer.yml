@@ -9,6 +9,7 @@ services:
       - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
       - SSE_INTERVAL=${SSE_INTERVAL}
       - PORT=${PORT}
+    container_name: greact-drill-sse-emulator-${BRANCH}
     expose:
       - ${PORT}
     networks:
