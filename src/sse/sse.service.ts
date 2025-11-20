@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Observable, Subject } from 'rxjs';
 import { MessageEvent, MessageEventData } from '../types/drilling-data.types';
-import { NotionService } from '../notion/notion.service';
+import { JsonDataService } from '../json/json-data.service';
 import { ENV } from '../config/env.config';
 
 @Injectable()
@@ -10,21 +10,21 @@ export class SseService {
   private clients = new Map<string, Subject<MessageEvent>>();
   private readonly intervalMs: number;
 
-  constructor(private readonly notionService: NotionService) {
+  constructor(private readonly jsonDataService: JsonDataService) {
     this.intervalMs = parseInt(ENV.SSE_INTERVAL);
     this.startBroadcast();
   }
 
   private startBroadcast(): void {
     setInterval(() => {
-      const drillingDataValues = this.notionService.getNextDrillingData();
+      const drillingDataValues = this.jsonDataService.getNextDrillingData();
       if (drillingDataValues) {
         const drillingData: MessageEventData = {
           version: '1.0.0',
           timestamp: Date.now(),
-          currentIndex: this.notionService.getDataInfo().currentIndex,
+          currentIndex: this.jsonDataService.getDataInfo().currentIndex,
           values: drillingDataValues
-        }
+        };
         this.broadcastEvent(drillingData);
       }
     }, this.intervalMs);
@@ -46,7 +46,6 @@ export class SseService {
     }
   }
 
-  // Отправка события всем подключенным клиентам
   broadcastEvent(eventData: MessageEventData): void {
     const messageEvent: MessageEvent = {
       data: eventData,
@@ -64,7 +63,7 @@ export class SseService {
   }
 
   async refreshNotionData(): Promise<void> {
-    await this.notionService.refreshData();
-    this.logger.log('Данные Notion обновлены');
+    await this.jsonDataService.refreshData();
+    this.logger.log('Данные обновлены');
   }
 }

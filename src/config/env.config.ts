@@ -7,8 +7,8 @@ export interface EnvironmentVariables {
 
 export function validateEnvironment(): EnvironmentVariables {
   const requiredVars = [
-    'NOTION_API_KEY',
-    'NOTION_DATABASE_ID',
+    // 'NOTION_API_KEY',
+    // 'NOTION_DATABASE_ID',
     'SSE_INTERVAL',
     'PORT',
   ] as const;

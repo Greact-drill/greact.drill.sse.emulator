@@ -24,7 +24,7 @@ export class SseController {
     this.logger.log(`Новое подключение к SSE потоку: ${id}`);
 
     response.on('close', () => {
-      this.logger.error(`Клиент ${id} отключился`);
+      this.logger.log(`Клиент ${id} отключился`);
       this.sseService.removeClient(id);
     });
 
@@ -46,6 +46,7 @@ export class SseController {
 
   @Post('refresh')
   async refreshData() {
-    return this.sseService.refreshNotionData();
+    await this.sseService.refreshNotionData();
+    return { message: 'Данные успешно обновлены' };
   }
 }
