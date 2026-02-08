@@ -1,3 +1,43 @@
+# Drill SSE Emulator
+
+Эмулятор потока данных через Server‑Sent Events (SSE). Позволяет загружать JSON‑данные и воспроизводить их в виде SSE‑сообщений для фронтенда/edge‑клиентов.
+
+## Назначение
+- локальная/тестовая генерация телеметрии
+- быстрые проверки UI без реальных источников
+
+## Основные эндпоинты
+### SSE
+- `GET /sse/stream` — поток данных
+- `GET /sse/status` — состояние сервиса
+- `POST /sse/refresh` — перезагрузка данных
+
+### JSON data
+- `POST /data/upload` — загрузка JSON файла (multipart)
+- `POST /data/upload-json` — загрузка JSON тела
+- `GET /data/info` — мета‑информация
+- `GET /data/all` — полный набор данных
+- `POST /data/reset` — сброс индекса
+- `GET /data/example` — пример формата
+
+## Переменные окружения
+- `PORT` — порт сервиса
+- `SSE_INTERVAL` — период отправки сообщений (мс)
+- `NOTION_API_KEY`, `NOTION_DATABASE_ID` — опционально для источника Notion
+
+## Запуск
+```bash
+npm install
+npm run start:dev
+```
+
+## Пример формата данных
+```json
+[
+  { "DC_out_100ms[140].10": 0.5, "DC_out_100ms[144]": 1 },
+  { "DC_out_100ms[140].10": 0.8, "DC_out_100ms[144]": 0 }
+]
+```
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
